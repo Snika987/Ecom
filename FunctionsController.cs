@@ -68,11 +68,6 @@ namespace ECommerce_Project.Controllers
                     return BadRequest("Invalid request");
                 }
 
-                if (string.IsNullOrWhiteSpace(request.Uid))
-                {
-                    return BadRequest("UId is required");
-                }
-
                 if (string.IsNullOrWhiteSpace(request.Email) || !new EmailAddressAttribute().IsValid(request.Email))
                 {
                     return BadRequest("Valid email is required");
@@ -89,9 +84,12 @@ namespace ECommerce_Project.Controllers
                     return Conflict("Email already registered");
                 }
 
+                // Generate Uid from email (first part before @)
+                var uid = request.Email.Split('@')[0] + "_" + DateTime.Now.Ticks.ToString().Substring(10);
+
                 var user = new User
                 {
-                    Uid = request.Uid,
+                    Uid = uid,
                     Email = request.Email,
                 };
                 user.Password = SimplePasswordHasher.HashPassword(request.Password);

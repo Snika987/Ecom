@@ -87,10 +87,9 @@
 
     $('#btn-register').on('click', function () {
       setMessage(messageEl, '');
-      var uid = $('#reg-uid').val().trim();
       var email = $('#reg-email').val().trim();
       var password = $('#reg-password').val();
-      if (!uid || !email || !password) {
+      if (!email || !password) {
         setMessage(messageEl, 'Please fill all fields', true);
         return;
       }
@@ -98,7 +97,7 @@
         method: 'POST',
         url: API_BASE + '/Functions/RegisterUser',
         contentType: 'application/json',
-        data: JSON.stringify({ uid: uid, email: email, password: password })
+        data: JSON.stringify({ email: email, password: password })
       }).done(function () {
         setMessage(messageEl, 'Account created. Please login.');
         activate('login');

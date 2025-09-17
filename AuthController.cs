@@ -28,13 +28,26 @@ namespace ECommerce_Project.Controllers
             var user = db.Users.FirstOrDefault(u => u.Email == request.Email);
             if (user == null)
             {
-                return Unauthorized("Invalid credentials");
+                return Unauthorized("User not found");
             }
 
-            var passwordOk = SimplePasswordHasher.VerifyPassword(request.Password, user.Password);
+            // Debug: Check if password is hashed or plain text
+            var isHashed = user.Password.Contains(':') && user.Password.Split(':').Length == 3;
+            
+            bool passwordOk;
+            if (isHashed)
+            {
+                passwordOk = SimplePasswordHasher.VerifyPassword(request.Password, user.Password);
+            }
+            else
+            {
+                // For existing plain text passwords (backward compatibility)
+                passwordOk = user.Password == request.Password;
+            }
+            
             if (!passwordOk)
             {
-                return Unauthorized("Invalid credentials");
+                return Unauthorized("Invalid password");
             }
 
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345superSecretKey@345superSecretKey@345"));

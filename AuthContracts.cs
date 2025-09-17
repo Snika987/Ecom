@@ -18,10 +18,6 @@ namespace ECommerce_Project.Models
     public class RegisterRequest
     {
         [Required]
-        [MaxLength(100)]
-        public string Uid { get; set; }
-
-        [Required]
         [EmailAddress]
         [MaxLength(255)]
         public string Email { get; set; }
