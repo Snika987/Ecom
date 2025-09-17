@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaCart | Shop</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="app.js" defer></script>
+    <script>
+        window.__PAGE__ = 'spa';
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:,">
+    <style>
+        body { background: #0b0f14; }
+    </style>
+    <noscript>Please enable JavaScript to use this site.</noscript>
+    <!-- Simple, modern auth UI -->
+</head>
+<body>
+    <div id="auth-view" class="container auth-container">
+        <div class="auth-card">
+            <div class="tabs">
+                <button id="tab-login" class="tab active">Login</button>
+                <button id="tab-register" class="tab">Register</button>
+            </div>
+
+            <div id="login-form" class="form active">
+                <h1>Welcome back</h1>
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input id="login-email" type="email" placeholder="you@example.com" autocomplete="email" required />
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+                </div>
+                <button id="btn-login" class="btn primary w-100">Login</button>
+                <div class="hint">New here? <a href="#" id="go-register">Create an account</a></div>
+            </div>
+
+            <div id="register-form" class="form">
+                <h1>Create your account</h1>
+                <div class="form-group">
+                    <label for="reg-uid">User ID</label>
+                    <input id="reg-uid" type="text" placeholder="john_doe_123" required />
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input id="reg-email" type="email" placeholder="you@example.com" autocomplete="email" required />
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input id="reg-password" type="password" placeholder="At least 6 characters" autocomplete="new-password" required />
+                </div>
+                <button id="btn-register" class="btn primary w-100">Create account</button>
+                <div class="hint">Already have an account? <a href="#" id="go-login">Sign in</a></div>
+            </div>
+
+            <div id="auth-message" class="message" role="alert" aria-live="polite"></div>
+        </div>
+    </div>
+
+    <div id="products-view" class="spa-hidden">
+        <header class="header">
+            <div class="brand">NovaCart</div>
+            <div class="spacer"></div>
+            <button id="btn-logout" class="btn outline">Logout</button>
+        </header>
+        <main class="container">
+            <h1 class="page-title">Products</h1>
+            <div id="products-grid" class="grid"></div>
+            <div id="products-message" class="message" role="alert" aria-live="polite"></div>
+        </main>
+    </div>
+
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3 id="modal-title">Order placed successfully !!</h3>
+                <p id="modal-text">Thank you for your purchase.</p>
+            </div>
+            <div class="modal-actions">
+                <button id="modal-close" class="btn primary">OK</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
