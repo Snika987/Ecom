@@ -6,43 +6,55 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce_Project.Models;
 
+/// <summary>
+/// User model - represents a user account in the database
+/// </summary>
 public partial class User
 {
-    public string Uid { get; set; }
+    public string Uid { get; set; }        // Unique user identifier
+    public string Password { get; set; }   // User password (stored as plain text for simplicity)
+    public string Email { get; set; }      // User email address (must be unique)
 
-    public string Password { get; set; }
-
-    public string Email { get; set; }
-
+    // Navigation property - links to user's orders
     public virtual ICollection<UserOrder> UserOrders { get; set; } = new List<UserOrder>();
 }
 
-// DTOs for authentication
+// ===== AUTHENTICATION DATA TRANSFER OBJECTS (DTOs) =====
+
+/// <summary>
+/// Request model for user login - contains login credentials
+/// </summary>
 public class LoginRequest
 {
-    [Required]
-    [EmailAddress]
+    [Required]                    // Email is required
+    [EmailAddress]               // Must be a valid email format
     public string Email { get; set; }
 
-    [Required]
+    [Required]                   // Password is required
     public string Password { get; set; }
 }
 
+/// <summary>
+/// Request model for user registration - contains new account details
+/// </summary>
 public class RegisterRequest
 {
-    [Required]
-    [EmailAddress]
-    [MaxLength(255)]
+    [Required]                    // Email is required
+    [EmailAddress]               // Must be a valid email format
+    [MaxLength(255)]             // Maximum 255 characters
     public string Email { get; set; }
 
-    [Required]
-    [MinLength(6)]
-    [MaxLength(100)]
+    [Required]                   // Password is required
+    [MinLength(6)]               // Minimum 6 characters
+    [MaxLength(100)]             // Maximum 100 characters
     public string Password { get; set; }
 }
 
+/// <summary>
+/// Response model for successful authentication - contains JWT token and expiration
+/// </summary>
 public class AuthenticatedResponse
 {
-    public string Token { get; set; }
-    public DateTime ExpiresAtUtc { get; set; }
+    public string Token { get; set; }        // JWT token for API authentication
+    public DateTime ExpiresAtUtc { get; set; } // When the token expires
 }
