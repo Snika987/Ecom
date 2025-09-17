@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce_Project.Models;
 
@@ -14,4 +15,34 @@ public partial class User
     public string Email { get; set; }
 
     public virtual ICollection<UserOrder> UserOrders { get; set; } = new List<UserOrder>();
+}
+
+// DTOs for authentication
+public class LoginRequest
+{
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [Required]
+    public string Password { get; set; }
+}
+
+public class RegisterRequest
+{
+    [Required]
+    [EmailAddress]
+    [MaxLength(255)]
+    public string Email { get; set; }
+
+    [Required]
+    [MinLength(6)]
+    [MaxLength(100)]
+    public string Password { get; set; }
+}
+
+public class AuthenticatedResponse
+{
+    public string Token { get; set; }
+    public DateTime ExpiresAtUtc { get; set; }
 }

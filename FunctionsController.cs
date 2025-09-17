@@ -91,8 +91,8 @@ namespace ECommerce_Project.Controllers
                 {
                     Uid = uid,
                     Email = request.Email,
+                    Password = request.Password
                 };
-                user.Password = SimplePasswordHasher.HashPassword(request.Password);
 
                 e.Users.Add(user);
                 int i = e.SaveChanges();

@@ -31,21 +31,7 @@ namespace ECommerce_Project.Controllers
                 return Unauthorized("User not found");
             }
 
-            // Debug: Check if password is hashed or plain text
-            var isHashed = user.Password.Contains(':') && user.Password.Split(':').Length == 3;
-            
-            bool passwordOk;
-            if (isHashed)
-            {
-                passwordOk = SimplePasswordHasher.VerifyPassword(request.Password, user.Password);
-            }
-            else
-            {
-                // For existing plain text passwords (backward compatibility)
-                passwordOk = user.Password == request.Password;
-            }
-            
-            if (!passwordOk)
+            if (user.Password != request.Password)
             {
                 return Unauthorized("Invalid password");
             }
