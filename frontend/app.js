@@ -253,8 +253,8 @@
       return; 
     }
 
-    // Logout button handler
-    $('#btn-logout').on('click', function () { 
+    // Logout button handler - use off() to prevent multiple bindings
+    $('#btn-logout').off('click').on('click', function () { 
       clearToken(); 
       showAuth(); 
     });
@@ -282,19 +282,27 @@
       setMessage(messageEl, 'Failed to load products', true);
     });
 
-    // Buy button click handler (creates order in database)
-    $(document).on('click', '.btn-buy', function () {
+    // Buy button click handler - remove any existing handlers first
+    $(document).off('click', '.btn-buy').on('click', '.btn-buy', function (e) {
+      e.preventDefault(); // Prevent any default behavior
+      e.stopPropagation(); // Stop event bubbling
+      
       var card = $(this).closest('.card');
       var productId = card.attr('data-id');
       var productName = card.find('.title').text();
+      var btn = $(this);
       
       if (!productId) {
         showModal('Error', 'Product ID not found');
         return;
       }
       
+      // Prevent multiple clicks while processing
+      if (btn.prop('disabled')) {
+        return;
+      }
+      
       // Show loading state
-      var btn = $(this);
       var originalText = btn.text();
       btn.text('Processing...').prop('disabled', true);
       
@@ -315,12 +323,14 @@
         showModal('Error', msg.replace(/"/g, ''));
       }).always(function () {
         // Restore button state
-        btn.text(originalText).prop('disabled', false);
+        setTimeout(function() {
+          btn.text(originalText).prop('disabled', false);
+        }, 100); // Small delay to ensure state is properly restored
       });
     });
 
-    // Modal close button handler
-    $('#modal-close').on('click', hideModal);
+    // Modal close button handler - remove existing handlers first
+    $('#modal-close').off('click').on('click', hideModal);
   }
 
   // ===== MODAL FUNCTIONS =====
