@@ -204,9 +204,12 @@
     var qty = (p.stock == null ? 0 : p.stock);
     var price = (p.price != null ? p.price : 0);
     
+    // Debug: log the image source
+    console.log('Loading image:', imgSrc);
+    
     return (
       '<div class="card" data-id="' + (p.pid || '') + '">' +
-        '<img src="' + imgSrc + '" alt="' + (p.pname || 'Product') + '">' +
+        '<img src="' + imgSrc + '" alt="' + (p.pname || 'Product') + '" onerror="console.log(\'Failed to load image: ' + imgSrc + '\')">' +
         '<div class="content">' +
           '<div class="title">' + (p.pname || 'Product') + '</div>' +
           '<div class="price">₹' + price + '</div>' +
