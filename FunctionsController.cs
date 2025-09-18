@@ -142,5 +142,53 @@ namespace ECommerce_Project.Controllers
                 return BadRequest(ex.Message); // Return error message if something goes wrong
             }
         }
+
+        /// <summary>
+        /// Create a new order when user clicks "Buy Now" - simple version
+        /// </summary>
+        /// <param name="userId">User ID</param>
+        /// <param name="productId">Product ID</param>
+        /// <returns>Success message if order created</returns>
+        [HttpPost]
+        [Route("BuyNow")]
+        public IActionResult BuyNow([FromQuery] string userId, [FromQuery] string productId)
+        {
+            try
+            {
+                // Get product price
+                var product = e.Products.FirstOrDefault(p => p.Pid == productId);
+
+                // Create simple order - always quantity 1
+                var order = new UserOrder
+                {
+                    Uid = userId, // User ID from frontend
+                    Pid = productId, // Product ID from frontend
+                    Quantity = 1, // Always 1
+                    OrderDate = DateTime.Now, // System date
+                    TotalAmount = product.Price, // Just the product price
+                    ShippingAddress = null // Leave blank (no not null constraint)
+                };
+
+                // Add order to database
+                e.UserOrders.Add(order);
+                int result = e.SaveChanges();
+
+                if (result > 0)
+                {
+                    return Ok(new { 
+                        success = true, 
+                        message = "Order placed successfully!"
+                    });
+                }
+                else
+                {
+                    return BadRequest("Failed to create order");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

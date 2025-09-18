@@ -77,6 +77,25 @@
     return t ? { 'Authorization': 'Bearer ' + t } : {};
   }
 
+  /**
+   * Get user ID from JWT token (simple decode)
+   * @returns {string} User ID from token
+   */
+  function getUserIdFromToken() {
+    var token = getToken();
+    if (!token) return null;
+    
+    try {
+      // Simple JWT decode (just get the payload part)
+      var payload = token.split('.')[1];
+      var decoded = JSON.parse(atob(payload));
+      return decoded.sub; // 'sub' claim contains the user ID
+    } catch (e) {
+      console.error('Failed to decode token:', e);
+      return null;
+    }
+  }
+
   // ===== VIEW MANAGEMENT =====
 
   /**
@@ -263,9 +282,41 @@
       setMessage(messageEl, 'Failed to load products', true);
     });
 
-    // Buy button click handler (shows success modal)
+    // Buy button click handler (creates order in database)
     $(document).on('click', '.btn-buy', function () {
-      showModal('Order placed successfully 🎉', 'Thank you for your purchase.');
+      var card = $(this).closest('.card');
+      var productId = card.attr('data-id');
+      var productName = card.find('.title').text();
+      
+      if (!productId) {
+        showModal('Error', 'Product ID not found');
+        return;
+      }
+      
+      // Show loading state
+      var btn = $(this);
+      var originalText = btn.text();
+      btn.text('Processing...').prop('disabled', true);
+      
+      // Call Buy Now API - send userId and productId as query parameters
+      var userId = getUserIdFromToken();
+      $.ajax({
+        method: 'POST',
+        url: API_BASE + '/Functions/BuyNow?userId=' + encodeURIComponent(userId) + '&productId=' + encodeURIComponent(productId)
+      }).done(function (res) {
+        if (res && res.success) {
+          showModal('Order placed successfully 🎉', 
+            'Thank you for your purchase of ' + productName + '!');
+        } else {
+          showModal('Error', 'Failed to place order');
+        }
+      }).fail(function (xhr) {
+        var msg = (xhr && xhr.responseText) ? xhr.responseText : 'Failed to place order';
+        showModal('Error', msg.replace(/"/g, ''));
+      }).always(function () {
+        // Restore button state
+        btn.text(originalText).prop('disabled', false);
+      });
     });
 
     // Modal close button handler
