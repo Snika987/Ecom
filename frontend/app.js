@@ -218,17 +218,14 @@
    * @returns {string} HTML string for product card
    */
   function renderProductCard(p) {
-    var imgSrc = p.image ? ('http://localhost:7077/Images/' + p.image) : 'https://via.placeholder.com/400x300?text=No+Image';
+    var imgSrc = p.image ? ('https://localhost:7077/Images/' + p.image) : 'https://via.placeholder.com/400x300?text=No+Image';
     var desc = p.description || 'No description';
     var qty = (p.stock == null ? 0 : p.stock);
     var price = (p.price != null ? p.price : 0);
     
-    // Debug: log the image source
-    console.log('Loading image:', imgSrc);
-    
     return (
       '<div class="card" data-id="' + (p.pid || '') + '">' +
-        '<img src="' + imgSrc + '" alt="' + (p.pname || 'Product') + '" onerror="console.log(\'Failed to load image: ' + imgSrc + '\')">' +
+        '<img src="' + imgSrc + '" alt="' + (p.pname || 'Product') + '" onerror="this.src=\'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop\'">' +
         '<div class="content">' +
           '<div class="title">' + (p.pname || 'Product') + '</div>' +
           '<div class="price">₹' + price + '</div>' +
